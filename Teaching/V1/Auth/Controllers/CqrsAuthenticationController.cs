@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+using Teaching.V1.Auth.CQRS.Services;
 using Teaching.V1.Auth.Models.AuthModels;
 using Teaching.V1.Auth.Services.Exceptions;
 using Teaching.V1.Auth.Services.Interfaces;
@@ -8,17 +9,18 @@ using Teaching.V1.Auth.Services.Interfaces;
 namespace Teaching.V1.Auth.Controllers;
 
 [ApiController]
-[ApiVersion("2.0")]
+[ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-public class AuthController : ControllerBase
+//[Obsolete("This API version is deprecated. Use API version 1.0 instead.")]
+public class CqrsAuthenticationController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly IAuthServiceWithCQRS _authService;
 
-    public AuthController(IAuthService authService) 
+    public CqrsAuthenticationController(IAuthServiceWithCQRS authService)
         => _authService = authService;
 
-    [HttpPost("Login")]
-    [MapToApiVersion("2.0")]
+    [HttpPost("LoginCQRS")]
+    [MapToApiVersion("1.0")]
     public async ValueTask<IActionResult> Login([FromForm] LoginModel model)
     {
         try
@@ -34,10 +36,8 @@ public class AuthController : ControllerBase
             });
         }
     }
-
-    [SwaggerOperation(Summary = "You can get delist of cars", Description = "you should smile more")]
-    [HttpPost("register")]
-    [MapToApiVersion("2.0")]
+    [MapToApiVersion("1.0")]
+    [HttpPost("registerCQRS")]
     public async ValueTask<IActionResult> Register([FromForm] RegisterModel model)
     {
         try
@@ -54,9 +54,3 @@ public class AuthController : ControllerBase
         }
     }
 }
-
-/*ApiVersionAttribute
-MapToApiVersionAttribute
-ApiVersionNeutralAttribute
-DeprecatedAttribute
-AdvertiseApiVersionsAttribute*/

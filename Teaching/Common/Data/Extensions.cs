@@ -12,7 +12,7 @@ public static class Extensions
 
         services.AddDbContext<AppDbContext>(options =>
         {
-            options.UseNpgsql(sqlConnectionString);
+            options.UseSqlite(sqlConnectionString);
         });
 
         return services;
